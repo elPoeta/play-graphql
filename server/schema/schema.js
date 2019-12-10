@@ -27,6 +27,12 @@ const RootQuery = new GraphQLObjectType({
       resolve(parentValue, args) {
         return MOVIESDUMMYDATA.find(movie => movie.id == args.id);
       }
+    },
+    movies: {
+      type: new GraphQLList(MovieType),
+      resolve(parentValue, args) {
+        return MOVIESDUMMYDATA;
+      }
     }
   }
 });
