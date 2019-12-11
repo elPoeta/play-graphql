@@ -1,8 +1,8 @@
 const graphql = require('graphql');
+let uuid = 3;
+const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList, GraphQLNonNull } = graphql;
 
-const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLList } = graphql;
-
-const MOVIESDUMMYDATA = [
+let MOVIESDUMMYDATA = [
   { id: 1, name: "The Lord of the Rings", genre: "Fantasy" },
   { id: 2, name: "Back to the future", genre: "Sci-fi" },
   { id: 3, name: "Terminator", genre: "Action" }
@@ -37,6 +37,29 @@ const RootQuery = new GraphQLObjectType({
   }
 });
 
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    addMovie: {
+      type: MovieType,
+      args: {
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        genre: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parentValue, args) {
+        const movie = {
+          id: ++uuid,
+          name: args.name,
+          genre: args.genre
+        }
+        MOVIESDUMMYDATA = [...MOVIESDUMMYDATA, movie];
+        return movie
+      }
+    }
+  }
+});
+
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation: Mutation
 });
