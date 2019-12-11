@@ -55,6 +55,28 @@ const Mutation = new GraphQLObjectType({
         MOVIESDUMMYDATA = [...MOVIESDUMMYDATA, movie];
         return movie
       }
+    },
+    updateMovie: {
+      type: MovieType,
+      args: {
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        genre: { type: GraphQLString }
+      },
+      resolve(parentValue, args) {
+        const movie = {
+          id: args.id,
+          name: args.name,
+          genre: args.genre
+        }
+        const foundMovie = MOVIESDUMMYDATA.find(movie => movie.id == args.id);
+        if (!foundMovie) {
+          return null
+        }
+        MOVIESDUMMYDATA[args.id] = { ...movie };
+        return MOVIESDUMMYDATA[args.id];
+      }
+
     }
   }
 });
