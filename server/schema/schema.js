@@ -77,6 +77,16 @@ const Mutation = new GraphQLObjectType({
         return MOVIESDUMMYDATA[args.id];
       }
 
+    },
+    deleteMovie: {
+      type: MovieType,
+      args:{
+        id: {type:GraphQLID}       
+      },
+      resolve(parentValue,args){
+        MOVIESDUMMYDATA = MOVIESDUMMYDATA.filter(movie => movie.id != args.id);
+        return MOVIESDUMMYDATA[args.id] || null;
+      }
     }
   }
 });
